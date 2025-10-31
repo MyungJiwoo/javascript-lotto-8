@@ -1,4 +1,4 @@
-const PRIZE = Object.freeze({
+export const PRIZE = Object.freeze({
   1: 2000000000,
   2: 30000000,
   3: 1500000,

@@ -39,6 +39,22 @@ class LottoController {
       const rank = determineRank(matchCount, isBonusMatched);
       if (rank >= 1 && rank <= 5) statistics.updateStatistics(rank);
     });
+
+    // 당첨 통계 출력
+    Console.print("\n당첨 통계");
+    Console.print("---");
+    for (let i = 5; i > 0; i--) {
+      Console.print(
+        `${CONDITIONS[i]} (${PRIZE[i].toLocaleString(
+          "ko-KR"
+        )}원) - ${statistics.getCountByRank(i)}개`
+      );
+    }
+
+    // 수익률 출력
+    Console.print(
+      `총 수익률은 ${statistics.calculateProfitRate(amount)}%입니다.`
+    );
   }
 
   async #inputPurchaseUntilValid() {
