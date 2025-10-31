@@ -85,4 +85,32 @@ describe("당첨 번호 클래스 테스트", () => {
       bonusNumber: 10,
     });
   });
+
+  test("발행된 로또와 당첨 번호를 비교하여 번호가 일치한 개수와 보너스 번호의 일치 여부를 반환한다.", () => {
+    const winningNumbers = new WinningNumbers([1, 2, 3, 4, 5, 6]);
+    winningNumbers.setBonusOnce(10);
+
+    const cases = [
+      {
+        lotto: [1, 2, 3, 10, 11, 12],
+        expected: { matchCount: 3, isBonusMatched: true },
+      },
+      {
+        lotto: [1, 2, 3, 4, 5, 6],
+        expected: { matchCount: 6, isBonusMatched: false },
+      },
+      {
+        lotto: [10, 11, 12, 13, 14, 15],
+        expected: { matchCount: 0, isBonusMatched: true },
+      },
+      {
+        lotto: [20, 21, 22, 23, 24, 25],
+        expected: { matchCount: 0, isBonusMatched: false },
+      },
+    ];
+
+    cases.forEach(({ lotto, expected }) => {
+      expect(winningNumbers.matchWinningNumbers(lotto)).toEqual(expected);
+    });
+  });
 });

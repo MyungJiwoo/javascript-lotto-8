@@ -55,6 +55,14 @@ class WinningNumbers {
   getWinningSet() {
     return { numbers: this.#numbers, bonusNumber: this.#bonusNumber };
   }
+
+  matchWinningNumbers(lotto) {
+    const matchCount = this.#numbers.filter((number) =>
+      lotto.includes(number)
+    ).length;
+    const isBonusMatched = lotto.includes(this.#bonusNumber);
+    return { matchCount, isBonusMatched };
+  }
 }
 
 export default WinningNumbers;
