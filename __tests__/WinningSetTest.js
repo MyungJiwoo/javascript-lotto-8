@@ -110,7 +110,7 @@ describe("당첨 번호 클래스 테스트", () => {
     ];
 
     cases.forEach(({ lotto, expected }) => {
-      expect(winningSet.matchWinningSet(lotto)).toEqual(expected);
+      expect(winningSet.draw(lotto)).toEqual(expected);
     });
   });
 });

@@ -56,7 +56,7 @@ class WinningSet {
     return { numbers: this.#numbers, bonusNumber: this.#bonusNumber };
   }
 
-  matchWinningSet(lotto) {
+  draw(lotto) {
     const matchCount = this.#numbers.filter((number) =>
       lotto.includes(number)
     ).length;
