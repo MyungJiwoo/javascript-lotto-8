@@ -1,0 +1,27 @@
+import Purchase from "../src/models/Purchase";
+
+describe("Purchase 클래스 테스트", () => {
+  test("1,000원 미만의 금액이라면 예외가 발생한다.", () => {
+    const invalidInputs = [300, 999, 1500.5, "700", "abcd"];
+
+    invalidInputs.forEach((input) => {
+      expect(() => new Purchase(input)).toThrow("[ERROR]");
+    });
+  });
+
+  test("1,000원 단위로 나눠지지 않으면 예외가 발생한다.", () => {
+    expect(() => {
+      new Purchase(10500);
+    }).toThrow("[ERROR]");
+  });
+
+  test("지불한 금액을 반환한다.", () => {
+    const purchase = new Purchase(10000);
+    expect(purchase.getPurchase()).toEqual(10000);
+  });
+
+  test("구매할 수 있는 로또 개수를 반환한다.", () => {
+    const purchase = new Purchase(10000);
+    expect(purchase.getLottoCount()).toEqual(10);
+  });
+});
