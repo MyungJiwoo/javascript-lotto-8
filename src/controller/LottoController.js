@@ -2,6 +2,7 @@ import { Console, Random } from "@woowacourse/mission-utils";
 import { InputView } from "../views/InputView.js";
 import Purchase from "../models/Purchase.js";
 import Lotto from "../models/Lotto.js";
+import WinningSet from "../models/WinningSet.js";
 
 class LottoController {
   async run() {
@@ -16,6 +17,11 @@ class LottoController {
       () => new Lotto(this.#getRandomNumbers())
     );
     lottos.forEach((lotto) => Console.print(lotto.getNumbers()));
+
+    // 당첨 번호 입력
+    const winningSet = await this.#inputWinningNumbersUntilValid();
+    const bonusNumber = await this.#inputWinningBonusNumberUntilValid();
+    winningSet.setBonusOnce(bonusNumber);
   }
 
   async #inputPurchaseUntilValid() {
@@ -32,6 +38,44 @@ class LottoController {
         }
 
         return new Purchase(parsedPurchase);
+      } catch (error) {
+        Console.print(error.message);
+      }
+    }
+  }
+
+  async #inputWinningNumbersUntilValid() {
+    while (true) {
+      try {
+        const rawWinningNumbers = await InputView.inputWinningNumbers();
+        const parsedWinningNumbers = rawWinningNumbers
+          .split(",")
+          .map((number) => Number(number.trim()));
+
+        if (parsedWinningNumbers === "")
+          throw new Error("[ERROR] 입력값이 비어있습니다.");
+
+        return new WinningSet(parsedWinningNumbers);
+      } catch (error) {
+        Console.print(error.message);
+      }
+    }
+  }
+
+  async #inputWinningBonusNumberUntilValid() {
+    while (true) {
+      try {
+        const rawWinningBonusNumber = await InputView.inputBonusNumber();
+        const parsedWinningBonusNumber = Number(rawWinningBonusNumber.trim());
+
+        if (parsedWinningBonusNumber === "")
+          throw new Error("[ERROR] 입력값이 비어있습니다.");
+
+        if (isNaN(parsedWinningBonusNumber)) {
+          throw new Error("[ERROR] 입력값은 정수여야 합니다.");
+        }
+
+        return parsedWinningBonusNumber;
       } catch (error) {
         Console.print(error.message);
       }

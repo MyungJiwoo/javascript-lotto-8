@@ -1,4 +1,4 @@
-class WinningNumbers {
+class WinningSet {
   #numbers;
   #bonusNumber = null;
 
@@ -56,7 +56,7 @@ class WinningNumbers {
     return { numbers: this.#numbers, bonusNumber: this.#bonusNumber };
   }
 
-  matchWinningNumbers(lotto) {
+  matchWinningSet(lotto) {
     const matchCount = this.#numbers.filter((number) =>
       lotto.includes(number)
     ).length;
@@ -65,4 +65,4 @@ class WinningNumbers {
   }
 }
 
-export default WinningNumbers;
+export default WinningSet;
