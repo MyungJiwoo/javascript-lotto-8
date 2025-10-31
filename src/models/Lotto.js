@@ -18,7 +18,7 @@ class Lotto {
     }
 
     for (let number of numbers) {
-      if (number > 45 || number < 1)
+      if (isNaN(number) || number > 45 || number < 1)
         throw new Error("[ERROR] 로또 번호는 1~45 사이의 양수여야 합니다.");
     }
   }

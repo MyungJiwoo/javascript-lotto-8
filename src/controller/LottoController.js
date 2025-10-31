@@ -1,6 +1,7 @@
-import { Console } from "@woowacourse/mission-utils";
+import { Console, Random } from "@woowacourse/mission-utils";
 import { InputView } from "../views/InputView.js";
 import Purchase from "../models/Purchase.js";
+import Lotto from "../models/Lotto.js";
 
 class LottoController {
   async run() {
@@ -10,6 +11,11 @@ class LottoController {
 
     // 발행한 로또 개수 및 번호 출력
     Console.print(`\n${amount}개를 구매했습니다.`);
+    const lottos = Array.from(
+      { length: amount },
+      () => new Lotto(this.#getRandomNumbers())
+    );
+    lottos.forEach((lotto) => Console.print(lotto.getNumbers()));
   }
 
   async #inputPurchaseUntilValid() {
@@ -30,6 +36,10 @@ class LottoController {
         Console.print(error.message);
       }
     }
+  }
+
+  #getRandomNumbers() {
+    return Random.pickUniqueNumbersInRange(1, 45, 6);
   }
 }
 
