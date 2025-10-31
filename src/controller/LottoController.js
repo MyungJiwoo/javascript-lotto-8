@@ -3,6 +3,8 @@ import { InputView } from "../views/InputView.js";
 import Purchase from "../models/Purchase.js";
 import Lotto from "../models/Lotto.js";
 import WinningSet from "../models/WinningSet.js";
+import { determineRank, CONDITIONS } from "../models/Rank.js";
+import Statistics, { PRIZE } from "../models/Statistics.js";
 
 class LottoController {
   async run() {
@@ -16,12 +18,27 @@ class LottoController {
       { length: amount },
       () => new Lotto(this.#getRandomNumbers())
     );
-    lottos.forEach((lotto) => Console.print(lotto.getNumbers()));
+
+    lottos.forEach((lotto) => {
+      const numbers = lotto.getNumbers();
+      Console.print(`[${numbers.join(", ")}]`);
+    });
 
     // 당첨 번호 입력
     const winningSet = await this.#inputWinningNumbersUntilValid();
     const bonusNumber = await this.#inputWinningBonusNumberUntilValid();
     winningSet.setBonusOnce(bonusNumber);
+
+    // 로또 추첨
+    const statistics = new Statistics();
+    lottos.forEach((lotto) => {
+      Console.print(lotto.getNumbers());
+      const { matchCount, isBonusMatched } = winningSet.draw(
+        lotto.getNumbers()
+      );
+      const rank = determineRank(matchCount, isBonusMatched);
+      if (rank >= 1 && rank <= 5) statistics.updateStatistics(rank);
+    });
   }
 
   async #inputPurchaseUntilValid() {
