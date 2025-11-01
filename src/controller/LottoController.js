@@ -14,6 +14,7 @@ import {
   LOTTO_MAX_NUMBER,
   LOTTO_MIN_NUMBER,
   LOTTO_NUMBER_COUNT,
+  ERROR_PREFIX,
 } from "../constants.js";
 
 class LottoController {
@@ -93,51 +94,58 @@ class LottoController {
     OutputView.outputProfitRate(statistics.calculateProfitRate(amount));
   }
 
-  async #inputPurchaseUntilValid() {
+  #inputUntilValid = async (inputFn, handleFn) => {
     while (true) {
       try {
-        const rawPurchase = await InputView.inputPurchase();
-        const parsedPurchase = Number(rawPurchase.trim());
-        CommonValidations.validateIsEmpty(parsedPurchase);
-        CommonValidations.validateIsInteger(parsedPurchase);
-
-        return new Purchase(parsedPurchase);
+        const raw = await inputFn();
+        return await handleFn(raw);
       } catch (error) {
-        Console.print(error.message);
+        Console.print(`${ERROR_PREFIX} ${error.message}`);
       }
     }
+  };
+
+  #handlePurchase = (raw) => {
+    const parsedPurchase = Number(raw.trim());
+    CommonValidations.validateIsEmpty(raw);
+    CommonValidations.validateIsInteger(Number(raw.trim()));
+
+    return new Purchase(parsedPurchase);
+  };
+
+  #handleWinningNumbers = (raw) => {
+    CommonValidations.validateIsEmpty(raw);
+    const parsedWinningNumbers = raw
+      .split(",")
+      .map((number) => Number(number.trim()));
+
+    return new WinningSet(parsedWinningNumbers);
+  };
+
+  #handleBonusNumber = (winningSet, raw) => {
+    const parsedWinningBonusNumber = Number(raw.trim());
+    CommonValidations.validateIsEmpty(parsedWinningBonusNumber);
+    CommonValidations.validateIsInteger(parsedWinningBonusNumber);
+    winningSet.setBonusOnce(parsedWinningBonusNumber);
+
+    return parsedWinningBonusNumber;
+  };
+
+  async #inputPurchaseUntilValid() {
+    return this.#inputUntilValid(InputView.inputPurchase, this.#handlePurchase);
   }
 
   async #inputWinningNumbersUntilValid() {
-    while (true) {
-      try {
-        const rawWinningNumbers = await InputView.inputWinningNumbers();
-        CommonValidations.validateIsEmpty(rawWinningNumbers);
-        const parsedWinningNumbers = rawWinningNumbers
-          .split(",")
-          .map((number) => Number(number.trim()));
-
-        return new WinningSet(parsedWinningNumbers);
-      } catch (error) {
-        Console.print(error.message);
-      }
-    }
+    return this.#inputUntilValid(
+      InputView.inputWinningNumbers,
+      this.#handleWinningNumbers
+    );
   }
 
   async #inputWinningBonusNumberUntilValid(winningSet) {
-    while (true) {
-      try {
-        const rawWinningBonusNumber = await InputView.inputBonusNumber();
-        const parsedWinningBonusNumber = Number(rawWinningBonusNumber.trim());
-        CommonValidations.validateIsEmpty(parsedWinningBonusNumber);
-        CommonValidations.validateIsInteger(parsedWinningBonusNumber);
-
-        winningSet.setBonusOnce(parsedWinningBonusNumber);
-        return parsedWinningBonusNumber;
-      } catch (error) {
-        Console.print(error.message);
-      }
-    }
+    return this.#inputUntilValid(InputView.inputPurchase, (raw) =>
+      this.#handleBonusNumber(winningSet, raw)
+    );
   }
 
   #getRandomNumbers() {
