@@ -28,8 +28,7 @@ class LottoController {
 
     // 당첨 번호 입력
     const winningSet = await this.#inputWinningNumbersUntilValid();
-    const bonusNumber = await this.#inputWinningBonusNumberUntilValid();
-    winningSet.setBonusOnce(bonusNumber);
+    await this.#inputWinningBonusNumberUntilValid(winningSet);
 
     // 로또 추첨
     const statistics = new Statistics();
@@ -86,7 +85,7 @@ class LottoController {
     }
   }
 
-  async #inputWinningBonusNumberUntilValid() {
+  async #inputWinningBonusNumberUntilValid(winningSet) {
     while (true) {
       try {
         const rawWinningBonusNumber = await InputView.inputBonusNumber();
@@ -94,6 +93,7 @@ class LottoController {
         CommonValidations.validateIsEmpty(parsedWinningBonusNumber);
         CommonValidations.validateIsInteger(parsedWinningBonusNumber);
 
+        winningSet.setBonusOnce(parsedWinningBonusNumber);
         return parsedWinningBonusNumber;
       } catch (error) {
         Console.print(error.message);
