@@ -1,3 +1,4 @@
+import { StatisticsValidations } from "../validations.js";
 import { RANK } from "./Rank.js";
 
 export const PRIZE = Object.freeze({
@@ -22,8 +23,7 @@ class Statistics {
   }
 
   #validateRank(rank) {
-    if (!this.#statistics.has(rank))
-      throw new Error("[ERROR] 등수는 1등부터 5등까지만 가능합니다.");
+    StatisticsValidations.validateRankRange(this.#statistics, rank);
   }
 
   updateStatistics(rank) {

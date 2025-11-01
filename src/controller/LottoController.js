@@ -6,6 +6,7 @@ import WinningSet from "../models/WinningSet.js";
 import { determineRank, CONDITIONS } from "../models/Rank.js";
 import Statistics, { PRIZE } from "../models/Statistics.js";
 import { OutputView } from "../views/OutputView.js";
+import { CommonValidations } from "../validations.js";
 
 class LottoController {
   async run() {
@@ -59,13 +60,8 @@ class LottoController {
       try {
         const rawPurchase = await InputView.inputPurchase();
         const parsedPurchase = Number(rawPurchase.trim());
-
-        if (parsedPurchase === "")
-          throw new Error("[ERROR] 입력값이 비어있습니다.");
-
-        if (isNaN(parsedPurchase)) {
-          throw new Error("[ERROR] 입력값은 정수여야 합니다.");
-        }
+        CommonValidations.validateIsEmpty(parsedPurchase);
+        CommonValidations.validateIsInteger(parsedPurchase);
 
         return new Purchase(parsedPurchase);
       } catch (error) {
@@ -78,12 +74,10 @@ class LottoController {
     while (true) {
       try {
         const rawWinningNumbers = await InputView.inputWinningNumbers();
+        CommonValidations.validateIsEmpty(rawWinningNumbers);
         const parsedWinningNumbers = rawWinningNumbers
           .split(",")
           .map((number) => Number(number.trim()));
-
-        if (parsedWinningNumbers === "")
-          throw new Error("[ERROR] 입력값이 비어있습니다.");
 
         return new WinningSet(parsedWinningNumbers);
       } catch (error) {
@@ -97,13 +91,8 @@ class LottoController {
       try {
         const rawWinningBonusNumber = await InputView.inputBonusNumber();
         const parsedWinningBonusNumber = Number(rawWinningBonusNumber.trim());
-
-        if (parsedWinningBonusNumber === "")
-          throw new Error("[ERROR] 입력값이 비어있습니다.");
-
-        if (isNaN(parsedWinningBonusNumber)) {
-          throw new Error("[ERROR] 입력값은 정수여야 합니다.");
-        }
+        CommonValidations.validateIsEmpty(parsedWinningBonusNumber);
+        CommonValidations.validateIsInteger(parsedWinningBonusNumber);
 
         return parsedWinningBonusNumber;
       } catch (error) {
