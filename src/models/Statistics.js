@@ -1,9 +1,11 @@
+import { RANK } from "./Rank.js";
+
 export const PRIZE = Object.freeze({
-  1: 2000000000,
-  2: 30000000,
-  3: 1500000,
-  4: 50000,
-  5: 5000,
+  [RANK.FIRST]: 2_000_000_000,
+  [RANK.SECOND]: 30_000_000,
+  [RANK.THIRD]: 1_500_000,
+  [RANK.FOURTH]: 50_000,
+  [RANK.FIFTH]: 5_000,
 });
 
 class Statistics {
@@ -11,11 +13,11 @@ class Statistics {
 
   constructor() {
     this.#statistics = new Map([
-      [1, 0],
-      [2, 0],
-      [3, 0],
-      [4, 0],
-      [5, 0],
+      [RANK.FIRST, 0],
+      [RANK.SECOND, 0],
+      [RANK.THIRD, 0],
+      [RANK.FOURTH, 0],
+      [RANK.FIFTH, 0],
     ]);
   }
 
