@@ -3,10 +3,18 @@ import { InputView } from "../views/InputView.js";
 import Purchase from "../models/Purchase.js";
 import Lotto from "../models/Lotto.js";
 import WinningSet from "../models/WinningSet.js";
-import { determineRank, RANK, CONDITIONS } from "../models/Rank.js";
-import Statistics, { PRIZE } from "../models/Statistics.js";
+import { determineRank } from "../models/Rank.js";
+import Statistics from "../models/Statistics.js";
 import { OutputView } from "../views/OutputView.js";
 import { CommonValidations } from "../validations.js";
+import {
+  RANK,
+  CONDITIONS,
+  PRIZE,
+  LOTTO_MAX_NUMBER,
+  LOTTO_MIN_NUMBER,
+  LOTTO_NUMBER_COUNT,
+} from "../constants.js";
 
 class LottoController {
   async run() {
@@ -133,7 +141,11 @@ class LottoController {
   }
 
   #getRandomNumbers() {
-    return Random.pickUniqueNumbersInRange(1, 45, 6);
+    return Random.pickUniqueNumbersInRange(
+      LOTTO_MIN_NUMBER,
+      LOTTO_MAX_NUMBER,
+      LOTTO_NUMBER_COUNT
+    );
   }
 }
 

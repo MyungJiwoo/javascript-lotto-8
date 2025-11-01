@@ -1,3 +1,4 @@
+import { LOTTO_PRICE } from "../constants.js";
 import { PurchaseValidations } from "../validations.js";
 
 class Purchase {
@@ -18,7 +19,7 @@ class Purchase {
   }
 
   getLottoCount() {
-    return this.#purchase / 1000;
+    return this.#purchase / LOTTO_PRICE;
   }
 }
 

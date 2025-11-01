@@ -1,24 +1,16 @@
 import { StatisticsValidations } from "../validations.js";
-import { RANK } from "./Rank.js";
-
-export const PRIZE = Object.freeze({
-  [RANK.FIRST]: 2_000_000_000,
-  [RANK.SECOND]: 30_000_000,
-  [RANK.THIRD]: 1_500_000,
-  [RANK.FOURTH]: 50_000,
-  [RANK.FIFTH]: 5_000,
-});
+import { RANK, PRIZE, INITIAL_COUNT, LOTTO_PRICE } from "../constants.js";
 
 class Statistics {
   #statistics;
 
   constructor() {
     this.#statistics = new Map([
-      [RANK.FIRST, 0],
-      [RANK.SECOND, 0],
-      [RANK.THIRD, 0],
-      [RANK.FOURTH, 0],
-      [RANK.FIFTH, 0],
+      [RANK.FIRST, INITIAL_COUNT],
+      [RANK.SECOND, INITIAL_COUNT],
+      [RANK.THIRD, INITIAL_COUNT],
+      [RANK.FOURTH, INITIAL_COUNT],
+      [RANK.FIFTH, INITIAL_COUNT],
     ]);
   }
 
@@ -30,7 +22,7 @@ class Statistics {
     const rankNumber = Number(rank);
     this.#validateRank(rankNumber);
 
-    const current = this.#statistics.get(rankNumber) ?? 0;
+    const current = this.#statistics.get(rankNumber) ?? INITIAL_COUNT;
     this.#statistics.set(rankNumber, current + 1);
   }
 
@@ -53,7 +45,8 @@ class Statistics {
 
   calculateProfitRate(lottoAmount) {
     const totalPrize = this.calculateTotalPrize();
-    return (totalPrize / (lottoAmount * 1000)) * 100;
+    const profitRate = (totalPrize / (lottoAmount * LOTTO_PRICE)) * 100;
+    return +profitRate.toFixed(2);
   }
 }
 

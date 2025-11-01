@@ -1,46 +1,60 @@
+import {
+  ERROR_MESSAGES,
+  ERROR_PREFIX,
+  LOTTO_MAX_NUMBER,
+  LOTTO_MIN_NUMBER,
+  LOTTO_NUMBER_COUNT,
+  LOTTO_PRICE,
+} from "./constants.js";
+
 export const CommonValidations = {
   validateIsEmpty: (value) => {
-    if (value == "") throw new Error("[ERROR] 입력값이 비어있습니다.");
+    if (value == "")
+      throw new Error(`${ERROR_PREFIX} ${ERROR_MESSAGES.COMMON.EMPTY_INPUT}`);
   },
 
   validateIsInteger: (value) => {
     if (!Number.isInteger(value)) {
-      throw new Error("[ERROR] 입력값은 정수여야 합니다.");
+      throw new Error(`${ERROR_PREFIX} ${ERROR_MESSAGES.COMMON.NOT_INTEGER}`);
     }
   },
 };
 
 export const LottoValidations = {
   validateLottoNumberCount: (numbers) => {
-    if (numbers.length !== 6) {
-      throw new Error("[ERROR] 로또 번호는 6개여야 합니다.");
+    if (numbers.length !== LOTTO_NUMBER_COUNT) {
+      throw new Error(`${ERROR_PREFIX} ${ERROR_MESSAGES.LOTTO.INVALID_COUNT}`);
     }
   },
 
   validateUniqueLottoNumbers: (numbers) => {
-    if (new Set(numbers).size !== 6) {
+    if (new Set(numbers).size !== LOTTO_NUMBER_COUNT) {
       throw new Error(
-        "[ERROR] 로또 번호는 중복되지 않는 6개의 숫자여야 합니다."
+        `${ERROR_PREFIX} ${ERROR_MESSAGES.LOTTO.DUPLICATE_NUMBER}`
       );
     }
   },
 
   validateLottoNumberRange: (number) => {
-    if (isNaN(number) || number > 45 || number < 1)
-      throw new Error("[ERROR] 로또 번호는 1~45 사이의 양수여야 합니다.");
+    if (isNaN(number) || number > LOTTO_MAX_NUMBER || number < LOTTO_MIN_NUMBER)
+      throw new Error(`${ERROR_PREFIX} ${ERROR_MESSAGES.LOTTO.OUT_OF_RANGE}`);
   },
 };
 
 export const PurchaseValidations = {
   validateMinPurchase: (purchase) => {
-    if (purchase < 1000) {
-      throw new Error("[ERROR] 최소 1000원 이상부터 가능합니다.");
+    if (purchase < LOTTO_PRICE) {
+      throw new Error(
+        `${ERROR_PREFIX} ${ERROR_MESSAGES.PURCHASE.BELOW_MIN_PRICE}`
+      );
     }
   },
 
   validatePurchaseAmountUnit: (purchase) => {
-    if (purchase % 1000 !== 0) {
-      throw new Error("[ERROR] 1000원 단위로 가능합니다.");
+    if (purchase % LOTTO_PRICE !== 0) {
+      throw new Error(
+        `${ERROR_PREFIX} ${ERROR_MESSAGES.PURCHASE.INVALID_UNIT}`
+      );
     }
   },
 };
@@ -48,25 +62,33 @@ export const PurchaseValidations = {
 export const StatisticsValidations = {
   validateRankRange: (statistics, rank) => {
     if (!statistics.has(rank))
-      throw new Error("[ERROR] 등수는 1등부터 5등까지만 가능합니다.");
+      throw new Error(
+        `${ERROR_PREFIX} ${ERROR_MESSAGES.STATISTICS.INVALID_RANK}`
+      );
   },
 };
 
 export const WinningSetValidations = {
   validateUniqueBonusNumber: (winningNumbers, bonusNumber) => {
     if (winningNumbers.includes(bonusNumber))
-      throw new Error("[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.");
+      throw new Error(
+        `${ERROR_PREFIX} ${ERROR_MESSAGES.WINNING_SET.DUPLICATE_BONUS}`
+      );
   },
 
   validateBonusNumberNotAlreadySet: (bonusNumber) => {
     if (bonusNumber !== null) {
-      throw new Error("[ERROR] 보너스 번호는 이미 설정되었습니다.");
+      throw new Error(
+        `${ERROR_PREFIX} ${ERROR_MESSAGES.WINNING_SET.BONUS_ALREADY_SET}`
+      );
     }
   },
 
   validateBonusNumberIsSet: (bonusNumber) => {
     if (bonusNumber === null) {
-      throw new Error("[ERROR] 보너스 번호가 아직 설정되지 않았습니다.");
+      throw new Error(
+        `${ERROR_PREFIX} ${ERROR_MESSAGES.WINNING_SET.BONUS_NOT_SET}`
+      );
     }
   },
 };
