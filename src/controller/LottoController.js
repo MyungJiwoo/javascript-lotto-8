@@ -10,27 +10,50 @@ import { CommonValidations } from "../validations.js";
 
 class LottoController {
   async run() {
-    // 구입 금액 입력
-    const purchase = await this.#inputPurchaseUntilValid();
-    const amount = purchase.getLottoCount();
+    const purchase = await this.#getPurchase();
+    const lottos = this.#generateLottos(purchase);
 
-    // 발행한 로또 개수 및 번호 출력
+    this.#printLottos(lottos);
+
+    const winningSet = await this.#getWinningSet();
+    const statistics = this.#drawLottos(lottos, winningSet);
+
+    this.#printStatistics(statistics);
+    this.#printProfitRate(statistics, purchase.getLottoCount());
+  }
+
+  // 구입 금액 입력 및 Purchase 생성
+  async #getPurchase() {
+    return await this.#inputPurchaseUntilValid();
+  }
+
+  // 구입 금액만큼 로또 발행
+  #generateLottos(purchase) {
+    const amount = purchase.getLottoCount();
     OutputView.outputAmount(amount);
+
     const lottos = Array.from(
       { length: amount },
       () => new Lotto(this.#getRandomNumbers())
     );
 
-    lottos.forEach((lotto) => {
-      const numbers = lotto.getNumbers();
-      OutputView.outputLotto(numbers);
-    });
+    return lottos;
+  }
 
-    // 당첨 번호 입력
+  // 발행된 로또 출력
+  #printLottos(lottos) {
+    lottos.forEach((lotto) => OutputView.outputLotto(lotto.getNumbers()));
+  }
+
+  // 당첨 번호 + 보너스 번호 입력
+  async #getWinningSet() {
     const winningSet = await this.#inputWinningNumbersUntilValid();
     await this.#inputWinningBonusNumberUntilValid(winningSet);
+    return winningSet;
+  }
 
-    // 로또 추첨
+  // 로또 추첨 및 통계 계산
+  #drawLottos(lottos, winningSet) {
     const statistics = new Statistics();
     lottos.forEach((lotto) => {
       const { matchCount, isBonusMatched } = winningSet.draw(
@@ -39,8 +62,11 @@ class LottoController {
       const rank = determineRank(matchCount, isBonusMatched);
       if (rank >= 1 && rank <= 5) statistics.updateStatistics(rank);
     });
+    return statistics;
+  }
 
-    // 당첨 통계 출력
+  // 통계 출력
+  #printStatistics(statistics) {
     OutputView.outputStatisticsTitle();
     for (let i = 5; i > 0; i--) {
       OutputView.outputStatistic(
@@ -49,8 +75,10 @@ class LottoController {
         statistics.getCountByRank(i)
       );
     }
+  }
 
-    // 수익률 출력
+  // 수익률 출력
+  #printProfitRate(statistics, amount) {
     OutputView.outputProfitRate(statistics.calculateProfitRate(amount));
   }
 
