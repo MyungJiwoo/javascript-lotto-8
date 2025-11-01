@@ -1,5 +1,4 @@
 export const RANK = Object.freeze({
-  NONE: null,
   FIRST: 1,
   SECOND: 2,
   THIRD: 3,
@@ -21,5 +20,5 @@ export function determineRank(matchCount, isBonusMatched) {
   if (matchCount === 5) return RANK.THIRD;
   if (matchCount === 4) return RANK.FOURTH;
   if (matchCount === 3) return RANK.FIFTH;
-  return RANK.NONE;
+  return null;
 }

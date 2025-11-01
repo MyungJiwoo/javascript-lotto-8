@@ -3,7 +3,7 @@ import { InputView } from "../views/InputView.js";
 import Purchase from "../models/Purchase.js";
 import Lotto from "../models/Lotto.js";
 import WinningSet from "../models/WinningSet.js";
-import { determineRank, CONDITIONS } from "../models/Rank.js";
+import { determineRank, RANK, CONDITIONS } from "../models/Rank.js";
 import Statistics, { PRIZE } from "../models/Statistics.js";
 import { OutputView } from "../views/OutputView.js";
 import { CommonValidations } from "../validations.js";
@@ -68,13 +68,16 @@ class LottoController {
   // 통계 출력
   #printStatistics(statistics) {
     OutputView.outputStatisticsTitle();
-    for (let i = 5; i > 0; i--) {
-      OutputView.outputStatistic(
-        CONDITIONS[i],
-        PRIZE[i].toLocaleString("ko-KR"),
-        statistics.getCountByRank(i)
-      );
-    }
+
+    Object.values(RANK)
+      .sort((a, b) => b - a)
+      .forEach((rank) => {
+        OutputView.outputStatistic(
+          CONDITIONS[rank],
+          PRIZE[rank].toLocaleString("ko-KR"),
+          statistics.getCountByRank(rank)
+        );
+      });
   }
 
   // 수익률 출력
