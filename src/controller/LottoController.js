@@ -5,6 +5,7 @@ import Lotto from "../models/Lotto.js";
 import WinningSet from "../models/WinningSet.js";
 import { determineRank, CONDITIONS } from "../models/Rank.js";
 import Statistics, { PRIZE } from "../models/Statistics.js";
+import { OutputView } from "../views/OutputView.js";
 
 class LottoController {
   async run() {
@@ -13,7 +14,7 @@ class LottoController {
     const amount = purchase.getLottoCount();
 
     // 발행한 로또 개수 및 번호 출력
-    Console.print(`\n${amount}개를 구매했습니다.`);
+    OutputView.outputAmount(amount);
     const lottos = Array.from(
       { length: amount },
       () => new Lotto(this.#getRandomNumbers())
@@ -21,7 +22,7 @@ class LottoController {
 
     lottos.forEach((lotto) => {
       const numbers = lotto.getNumbers();
-      Console.print(`[${numbers.join(", ")}]`);
+      OutputView.outputLotto(numbers);
     });
 
     // 당첨 번호 입력
@@ -32,7 +33,6 @@ class LottoController {
     // 로또 추첨
     const statistics = new Statistics();
     lottos.forEach((lotto) => {
-      Console.print(lotto.getNumbers());
       const { matchCount, isBonusMatched } = winningSet.draw(
         lotto.getNumbers()
       );
@@ -41,20 +41,17 @@ class LottoController {
     });
 
     // 당첨 통계 출력
-    Console.print("\n당첨 통계");
-    Console.print("---");
+    OutputView.outputStatisticsTitle();
     for (let i = 5; i > 0; i--) {
-      Console.print(
-        `${CONDITIONS[i]} (${PRIZE[i].toLocaleString(
-          "ko-KR"
-        )}원) - ${statistics.getCountByRank(i)}개`
+      OutputView.outputStatistic(
+        CONDITIONS[i],
+        PRIZE[i].toLocaleString("ko-KR"),
+        statistics.getCountByRank(i)
       );
     }
 
     // 수익률 출력
-    Console.print(
-      `총 수익률은 ${statistics.calculateProfitRate(amount)}%입니다.`
-    );
+    OutputView.outputProfitRate(statistics.calculateProfitRate(amount));
   }
 
   async #inputPurchaseUntilValid() {
