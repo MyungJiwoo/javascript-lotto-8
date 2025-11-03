@@ -26,7 +26,7 @@ describe("당첨 통계 클래스 테스트", () => {
     statistics.updateStatistics(4);
     statistics.updateStatistics(4);
 
-    expect(statistics.getStatistics()).toEqual({
+    expect(statistics.statistics).toEqual({
       1: 1,
       2: 1,
       3: 1,

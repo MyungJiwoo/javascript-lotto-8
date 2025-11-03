@@ -28,7 +28,7 @@ class LottoController {
     const statistics = this.#drawLottos(lottos, winningSet);
 
     this.#printStatistics(statistics);
-    this.#printProfitRate(statistics, purchase.getLottoCount());
+    this.#printProfitRate(statistics, purchase.lottoCount);
   }
 
   // 구입 금액 입력 및 Purchase 생성
@@ -38,7 +38,7 @@ class LottoController {
 
   // 구입 금액만큼 로또 발행
   #generateLottos(purchase) {
-    const amount = purchase.getLottoCount();
+    const amount = purchase.lottoCount;
     OutputView.outputAmount(amount);
 
     const lottos = Array.from(
@@ -51,7 +51,7 @@ class LottoController {
 
   // 발행된 로또 출력
   #printLottos(lottos) {
-    lottos.forEach((lotto) => OutputView.outputLotto(lotto.getNumbers()));
+    lottos.forEach((lotto) => OutputView.outputLotto(lotto.numbers));
   }
 
   // 당첨 번호 + 보너스 번호 입력
@@ -65,9 +65,7 @@ class LottoController {
   #drawLottos(lottos, winningSet) {
     const statistics = new Statistics();
     lottos.forEach((lotto) => {
-      const { matchCount, isBonusMatched } = winningSet.draw(
-        lotto.getNumbers()
-      );
+      const { matchCount, isBonusMatched } = winningSet.draw(lotto.numbers);
       const rank = determineRank(matchCount, isBonusMatched);
       if (rank >= 1 && rank <= 5) statistics.updateStatistics(rank);
     });
@@ -126,7 +124,7 @@ class LottoController {
     const parsedWinningBonusNumber = Number(raw.trim());
     CommonValidations.validateIsEmpty(parsedWinningBonusNumber);
     CommonValidations.validateIsInteger(parsedWinningBonusNumber);
-    winningSet.setBonusOnce(parsedWinningBonusNumber);
+    winningSet.bonusOnce = parsedWinningBonusNumber;
 
     return parsedWinningBonusNumber;
   };

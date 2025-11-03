@@ -20,11 +20,11 @@ describe("Purchase 클래스 테스트", () => {
 
   test("지불한 금액을 반환한다.", () => {
     const purchase = new Purchase(10000);
-    expect(purchase.getPurchase()).toEqual(10000);
+    expect(purchase.purchase).toEqual(10000);
   });
 
   test("구매할 수 있는 로또 개수를 반환한다.", () => {
     const purchase = new Purchase(10000);
-    expect(purchase.getLottoCount()).toEqual(10);
+    expect(purchase.lottoCount).toEqual(10);
   });
 });

@@ -18,16 +18,16 @@ class Statistics {
     StatisticsValidations.validateRankRange(this.#statistics, rank);
   }
 
+  get statistics() {
+    return Object.fromEntries(this.#statistics);
+  }
+
   updateStatistics(rank) {
     const rankNumber = Number(rank);
     this.#validateRank(rankNumber);
 
     const current = this.#statistics.get(rankNumber) ?? INITIAL_COUNT;
     this.#statistics.set(rankNumber, current + 1);
-  }
-
-  getStatistics() {
-    return Object.fromEntries(this.#statistics);
   }
 
   getCountByRank(rank) {

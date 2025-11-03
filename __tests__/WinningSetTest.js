@@ -29,20 +29,20 @@ describe("당첨 번호 클래스 테스트", () => {
 
   test("당첨 번호를 반환한다.", () => {
     const winningSet = new WinningSet([1, 2, 3, 4, 5, 6]);
-    expect(winningSet.getNumbers()).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(winningSet.numbers).toEqual([1, 2, 3, 4, 5, 6]);
   });
 
   test("보너스 번호를 반환한다.", () => {
     const winningSet = new WinningSet([1, 2, 3, 4, 5, 6]);
-    winningSet.setBonusOnce(10);
-    expect(winningSet.getBonusNumber()).toEqual(10);
+    winningSet.bonusOnce = 10;
+    expect(winningSet.bonusNumber).toEqual(10);
   });
 
   test("보너스 번호와 당첨 번호가 중복되면 예외가 발생한다.", () => {
     const winningSet = new WinningSet([1, 2, 3, 4, 5, 6]);
 
     expect(() => {
-      winningSet.setBonusOnce(1);
+      winningSet.bonusOnce = 1;
     }).toThrow(ERROR_MESSAGES.WINNING_SET.DUPLICATE_BONUS);
   });
 
@@ -55,7 +55,7 @@ describe("당첨 번호 클래스 테스트", () => {
 
     invalidCases.forEach((numbers) => {
       expect(() => {
-        winningSet.setBonusOnce(numbers);
+        winningSet.bonusOnce = numbers;
       }).toThrow(ERROR_MESSAGES.LOTTO.OUT_OF_RANGE);
     });
   });
@@ -64,24 +64,24 @@ describe("당첨 번호 클래스 테스트", () => {
     const winningSet = new WinningSet([1, 2, 3, 4, 5, 6]);
 
     expect(() => {
-      winningSet.getBonusNumber();
+      winningSet.bonusNumber;
     }).toThrow(ERROR_MESSAGES.WINNING_SET.BONUS_NOT_SET);
   });
 
   test("보너스 번호를 두 번 설정하면 예외가 발생한다.", () => {
     const winningSet = new WinningSet([1, 2, 3, 4, 5, 6]);
-    winningSet.setBonusOnce(10);
+    winningSet.bonusOnce = 10;
 
     expect(() => {
-      winningSet.setBonusOnce(20);
+      winningSet.bonusOnce = 20;
     }).toThrow(ERROR_MESSAGES.WINNING_SET.BONUS_ALREADY_SET);
   });
 
   test("당첨 번호와 보너스 번호를 함께 반환한다.", () => {
     const winningSet = new WinningSet([1, 2, 3, 4, 5, 6]);
-    winningSet.setBonusOnce(10);
+    winningSet.bonusOnce = 10;
 
-    expect(winningSet.getWinningSet()).toEqual({
+    expect(winningSet.winningSet).toEqual({
       numbers: [1, 2, 3, 4, 5, 6],
       bonusNumber: 10,
     });
@@ -89,7 +89,7 @@ describe("당첨 번호 클래스 테스트", () => {
 
   test("발행된 로또와 당첨 번호를 비교하여 번호가 일치한 개수와 보너스 번호의 일치 여부를 반환한다.", () => {
     const winningSet = new WinningSet([1, 2, 3, 4, 5, 6]);
-    winningSet.setBonusOnce(10);
+    winningSet.bonusOnce = 10;
 
     const cases = [
       {

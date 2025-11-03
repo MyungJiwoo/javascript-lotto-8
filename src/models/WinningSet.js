@@ -22,24 +22,24 @@ class WinningSet {
     WinningSetValidations.validateUniqueBonusNumber(this.#numbers, bonusNumber);
   }
 
-  setBonusOnce(bonusNumber) {
+  set bonusOnce(bonusNumber) {
     WinningSetValidations.validateBonusNumberNotAlreadySet(this.#bonusNumber);
 
     this.#validateBonusNumber(bonusNumber);
     this.#bonusNumber = bonusNumber;
   }
 
-  getNumbers() {
+  get numbers() {
     return this.#numbers;
   }
 
-  getBonusNumber() {
+  get bonusNumber() {
     WinningSetValidations.validateBonusNumberIsSet(this.#bonusNumber);
 
     return this.#bonusNumber;
   }
 
-  getWinningSet() {
+  get winningSet() {
     return { numbers: this.#numbers, bonusNumber: this.#bonusNumber };
   }
 

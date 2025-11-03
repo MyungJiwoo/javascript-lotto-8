@@ -14,11 +14,11 @@ class Purchase {
     PurchaseValidations.validatePurchaseAmountUnit(purchase);
   }
 
-  getPurchase() {
+  get purchase() {
     return this.#purchase;
   }
 
-  getLottoCount() {
+  get lottoCount() {
     return this.#purchase / LOTTO_PRICE;
   }
 }
