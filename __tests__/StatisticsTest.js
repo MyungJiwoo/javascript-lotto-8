@@ -1,4 +1,5 @@
-import Statistics from "../src/models/Statistics";
+import { ERROR_MESSAGES } from "../src/constants.js";
+import Statistics from "../src/models/Statistics.js";
 
 describe("당첨 통계 클래스 테스트", () => {
   test("등수를 기준으로 당첨 횟수를 기록한다.", () => {
@@ -14,7 +15,7 @@ describe("당첨 통계 클래스 테스트", () => {
 
     expect(() => {
       statistics.updateStatistics(10);
-    }).toThrow("[ERROR]");
+    }).toThrow(ERROR_MESSAGES.STATISTICS.INVALID_RANK);
   });
 
   test("전체 당첨 통계를 반환한다.", () => {

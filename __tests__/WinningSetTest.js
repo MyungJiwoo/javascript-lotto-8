@@ -1,16 +1,17 @@
+import { ERROR_MESSAGES } from "../src/constants.js";
 import WinningSet from "../src/models/WinningSet.js";
 
 describe("당첨 번호 클래스 테스트", () => {
   test("당첨 번호의 개수가 6개가 넘어가면 예외가 발생한다.", () => {
     expect(() => {
       new WinningSet([1, 2, 3, 4, 5, 6, 7]);
-    }).toThrow("[ERROR]");
+    }).toThrow(ERROR_MESSAGES.LOTTO.INVALID_COUNT);
   });
 
   test("당첨 번호에 중복된 숫자가 있으면 예외가 발생한다.", () => {
     expect(() => {
       new WinningSet([1, 2, 3, 4, 5, 5]);
-    }).toThrow("[ERROR]");
+    }).toThrow(ERROR_MESSAGES.LOTTO.DUPLICATE_NUMBER);
   });
 
   test("당첨 번호에 1~45 이외의 숫자가 문자가 있으면 예외가 발생한다.", () => {
@@ -22,7 +23,7 @@ describe("당첨 번호 클래스 테스트", () => {
     invalidCases.forEach((numbers) => {
       expect(() => {
         new WinningSet(numbers);
-      }).toThrow("[ERROR]");
+      }).toThrow(ERROR_MESSAGES.LOTTO.OUT_OF_RANGE);
     });
   });
 
@@ -42,7 +43,7 @@ describe("당첨 번호 클래스 테스트", () => {
 
     expect(() => {
       winningSet.setBonusOnce(1);
-    }).toThrow("[ERROR]");
+    }).toThrow(ERROR_MESSAGES.WINNING_SET.DUPLICATE_BONUS);
   });
 
   test("보너스 번호가 1~45 이외의 숫자나 문자라면 예외가 발생한다.", () => {
@@ -55,7 +56,7 @@ describe("당첨 번호 클래스 테스트", () => {
     invalidCases.forEach((numbers) => {
       expect(() => {
         winningSet.setBonusOnce(numbers);
-      }).toThrow("[ERROR]");
+      }).toThrow(ERROR_MESSAGES.LOTTO.OUT_OF_RANGE);
     });
   });
 
@@ -64,7 +65,7 @@ describe("당첨 번호 클래스 테스트", () => {
 
     expect(() => {
       winningSet.getBonusNumber();
-    }).toThrow("[ERROR]");
+    }).toThrow(ERROR_MESSAGES.WINNING_SET.BONUS_NOT_SET);
   });
 
   test("보너스 번호를 두 번 설정하면 예외가 발생한다.", () => {
@@ -73,7 +74,7 @@ describe("당첨 번호 클래스 테스트", () => {
 
     expect(() => {
       winningSet.setBonusOnce(20);
-    }).toThrow("[ERROR]");
+    }).toThrow(ERROR_MESSAGES.WINNING_SET.BONUS_ALREADY_SET);
   });
 
   test("당첨 번호와 보너스 번호를 함께 반환한다.", () => {
