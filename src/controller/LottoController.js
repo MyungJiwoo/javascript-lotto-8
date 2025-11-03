@@ -80,7 +80,7 @@ class LottoController {
       .sort((a, b) => b - a)
       .forEach((rank) => {
         OutputView.outputStatistic(
-          CONDITIONS[rank],
+          CONDITIONS[rank].message,
           PRIZE[rank].toLocaleString("ko-KR"),
           statistics.getCountByRank(rank)
         );

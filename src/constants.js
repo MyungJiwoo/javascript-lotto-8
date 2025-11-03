@@ -7,11 +7,11 @@ export const RANK = Object.freeze({
 });
 
 export const CONDITIONS = Object.freeze({
-  [RANK.FIRST]: "6개 일치",
-  [RANK.SECOND]: "5개 일치, 보너스 볼 일치",
-  [RANK.THIRD]: "5개 일치",
-  [RANK.FOURTH]: "4개 일치",
-  [RANK.FIFTH]: "3개 일치",
+  [RANK.FIRST]: { matchCount: 6, message: "6개 일치" },
+  [RANK.SECOND]: { matchCount: 5, message: "5개 일치, 보너스 볼 일치" },
+  [RANK.THIRD]: { matchCount: 5, message: "5개 일치" },
+  [RANK.FOURTH]: { matchCount: 4, message: "4개 일치" },
+  [RANK.FIFTH]: { matchCount: 3, message: "3개 일치" },
 });
 
 export const PRIZE = Object.freeze({

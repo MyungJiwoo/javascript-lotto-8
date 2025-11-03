@@ -1,10 +1,11 @@
-import { RANK } from "../constants.js";
+import { CONDITIONS, RANK } from "../constants.js";
 
 export function determineRank(matchCount, isBonusMatched) {
-  if (matchCount === 6) return RANK.FIRST;
-  if (matchCount === 5 && isBonusMatched) return RANK.SECOND;
-  if (matchCount === 5) return RANK.THIRD;
-  if (matchCount === 4) return RANK.FOURTH;
-  if (matchCount === 3) return RANK.FIFTH;
+  if (matchCount === CONDITIONS[RANK.FIRST].matchCount) return RANK.FIRST;
+  if (matchCount === CONDITIONS[RANK.SECOND].matchCount && isBonusMatched)
+    return RANK.SECOND;
+  if (matchCount === CONDITIONS[RANK.THIRD].matchCount) return RANK.THIRD;
+  if (matchCount === CONDITIONS[RANK.FOURTH].matchCount) return RANK.FOURTH;
+  if (matchCount === CONDITIONS[RANK.FIFTH].matchCount) return RANK.FIFTH;
   return null;
 }
